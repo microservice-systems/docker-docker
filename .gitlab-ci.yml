@@ -1,0 +1,90 @@
+stages:
+  - Build
+  - Push
+
+variables:
+  APPLICATION: "docker"
+
+docker:
+  stage: Build
+  image: docker:20.10.11
+  when: on_success
+  script:
+    - set -e
+    - apk add --no-cache uuidgen
+    - export VERSION="$(cat Version)"
+    - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
+    - export BUILD="$(uuidgen)"
+    - echo REGISTRY="$REGISTRY"
+    - if [[ -z $GROUP ]]; then echo "GROUP is not specified"; exit 1; else echo GROUP="$GROUP"; fi
+    - if [[ -z $APPLICATION ]]; then echo "APPLICATION is not specified"; exit 1; else echo APPLICATION="$APPLICATION"; fi
+    - if [[ -z $VERSION ]]; then echo "VERSION is not specified"; exit 1; else echo VERSION="$VERSION"; fi
+    - if [[ -z $REVISION ]]; then echo "REVISION is not specified"; exit 1; else echo REVISION="$REVISION"; fi
+    - if [[ -z $BUILD ]]; then echo "BUILD is not specified"; exit 1; else echo BUILD="$BUILD"; fi
+    - docker build --no-cache --file ./Dockerfile
+                              --build-arg registry="$REGISTRY"
+                              --build-arg group="$GROUP"
+                              --build-arg application="$APPLICATION"
+                              --build-arg version="$VERSION"
+                              --build-arg revision="$REVISION"
+                              --build-arg build="$BUILD"
+                              --build-arg ci_project_url="$CI_PROJECT_URL"
+                              --build-arg ci_job_url="$CI_JOB_URL"
+                              --build-arg ci_pipeline_url="$CI_PIPELINE_URL"
+                              --build-arg ci_commit_branch="$CI_COMMIT_REF_NAME"
+                              --build-arg ci_commit_tag="$CI_COMMIT_TAG"
+                              --build-arg ci_commit_sha="$CI_COMMIT_SHA"
+                              --build-arg ci_commit_message="$CI_COMMIT_MESSAGE"
+                              --build-arg ci_commit_before_sha="$CI_COMMIT_BEFORE_SHA"
+                              --build-arg gitlab_user_login="$GITLAB_USER_LOGIN"
+                              --build-arg gitlab_user_name="$GITLAB_USER_NAME"
+                              --build-arg gitlab_user_email="$GITLAB_USER_EMAIL"
+                              --tag $REGISTRY$GROUP/$APPLICATION:$VERSION .
+    - docker rmi $(docker images --filter "label=build=$BUILD" -q)
+  tags:
+    - docker
+
+registry:
+  stage: Push
+  image: docker:20.10.11
+  when: manual
+  script:
+    - set -e
+    - apk add --no-cache uuidgen
+    - mkdir -p ~/.docker
+    - echo $REGISTRY_AUTH > ~/.docker/config.json
+    - export VERSION="$(cat Version)"
+    - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
+    - export BUILD="$(uuidgen)"
+    - echo REGISTRY="$REGISTRY"
+    - if [[ -z $GROUP ]]; then echo "GROUP is not specified"; exit 1; else echo GROUP="$GROUP"; fi
+    - if [[ -z $APPLICATION ]]; then echo "APPLICATION is not specified"; exit 1; else echo APPLICATION="$APPLICATION"; fi
+    - if [[ -z $VERSION ]]; then echo "VERSION is not specified"; exit 1; else echo VERSION="$VERSION"; fi
+    - if [[ -z $REVISION ]]; then echo "REVISION is not specified"; exit 1; else echo REVISION="$REVISION"; fi
+    - if [[ -z $BUILD ]]; then echo "BUILD is not specified"; exit 1; else echo BUILD="$BUILD"; fi
+    - docker build --no-cache --file ./Dockerfile
+                              --build-arg registry="$REGISTRY"
+                              --build-arg group="$GROUP"
+                              --build-arg application="$APPLICATION"
+                              --build-arg version="$VERSION"
+                              --build-arg revision="$REVISION"
+                              --build-arg build="$BUILD"
+                              --build-arg ci_project_url="$CI_PROJECT_URL"
+                              --build-arg ci_job_url="$CI_JOB_URL"
+                              --build-arg ci_pipeline_url="$CI_PIPELINE_URL"
+                              --build-arg ci_commit_branch="$CI_COMMIT_REF_NAME"
+                              --build-arg ci_commit_tag="$CI_COMMIT_TAG"
+                              --build-arg ci_commit_sha="$CI_COMMIT_SHA"
+                              --build-arg ci_commit_message="$CI_COMMIT_MESSAGE"
+                              --build-arg ci_commit_before_sha="$CI_COMMIT_BEFORE_SHA"
+                              --build-arg gitlab_user_login="$GITLAB_USER_LOGIN"
+                              --build-arg gitlab_user_name="$GITLAB_USER_NAME"
+                              --build-arg gitlab_user_email="$GITLAB_USER_EMAIL"
+                              --tag $REGISTRY$GROUP/$APPLICATION:$VERSION .
+    - docker push $REGISTRY$GROUP/$APPLICATION:$VERSION
+    - docker rmi $(docker images --filter "label=build=$BUILD" -q)
+  only:
+    - tags
+    - release/*
+  tags:
+    - docker
