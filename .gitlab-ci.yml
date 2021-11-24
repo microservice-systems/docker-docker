@@ -5,6 +5,7 @@ stages:
 variables:
   APPLICATION: "docker"
   DESCRIPTION: "Docker in Docker Image"
+  VERSION: "20.10.10"
 
 docker:
   stage: Build
@@ -13,7 +14,6 @@ docker:
   script:
     - set -e
     - apk add --no-cache uuidgen
-    - export VERSION="$(cat Version)"
     - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
     - export BUILD="$(uuidgen)"
     - echo REGISTRY="$REGISTRY"
@@ -56,7 +56,6 @@ registry:
     - apk add --no-cache uuidgen
     - mkdir -p ~/.docker
     - echo $REGISTRY_AUTH > ~/.docker/config.json
-    - export VERSION="$(cat Version)"
     - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
     - export BUILD="$(uuidgen)"
     - echo REGISTRY="$REGISTRY"
