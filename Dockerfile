@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 ARG registry
 ARG group
 ARG application
+ARG description
 ARG version
 ARG revision
 ARG build
@@ -19,6 +20,7 @@ ARG gitlab_user_email
 ENV REGISTRY="$registry"
 ENV GROUP="$group"
 ENV APPLICATION="$application"
+ENV DESCRIPTION="$description"
 ENV VERSION="$version"
 ENV REVISION="$revision"
 ENV BUILD="$build"
@@ -47,6 +49,7 @@ WORKDIR /root
 LABEL registry="$registry"
 LABEL group="$group"
 LABEL application="$application"
+LABEL description="$description"
 LABEL version="$version"
 LABEL revision="$revision"
 LABEL build="$build"
