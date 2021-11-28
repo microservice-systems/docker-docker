@@ -7,6 +7,8 @@ variables:
   VERSION: "20.10.10"
   NAME: "Docker"
   DESCRIPTION: "Docker in Docker Image"
+  REPOSITORY: "$CI_PROJECT_URL"
+  REPOSITORY_TYPE: "GITLAB"
 
 .build-docker-before-script:
   before_script:
@@ -25,6 +27,8 @@ variables:
     - if [[ -z $BUILD ]]; then echo "BUILD is not specified"; exit 1; else echo BUILD="$BUILD"; fi
     - if [[ -z $NAME ]]; then echo "NAME is not specified"; exit 1; else echo NAME="$NAME"; fi
     - if [[ -z $DESCRIPTION ]]; then echo "DESCRIPTION is not specified"; exit 1; else echo DESCRIPTION="$DESCRIPTION"; fi
+    - if [[ -z $REPOSITORY ]]; then echo "REPOSITORY is not specified"; exit 1; else echo REPOSITORY="$REPOSITORY"; fi
+    - if [[ -z $REPOSITORY_TYPE ]]; then echo "REPOSITORY_TYPE is not specified"; exit 1; else echo REPOSITORY_TYPE="$REPOSITORY_TYPE"; fi
     - if [[ -z $MAINTAINER_LOGIN ]]; then echo "MAINTAINER_LOGIN is not specified"; exit 1; else echo MAINTAINER_LOGIN="$MAINTAINER_LOGIN"; fi
     - if [[ -z $MAINTAINER_NAME ]]; then echo "MAINTAINER_NAME is not specified"; exit 1; else echo MAINTAINER_NAME="$MAINTAINER_NAME"; fi
     - if [[ -z $MAINTAINER_EMAIL ]]; then echo "MAINTAINER_EMAIL is not specified"; exit 1; else echo MAINTAINER_EMAIL="$MAINTAINER_EMAIL"; fi
@@ -37,7 +41,8 @@ variables:
                               --build-arg build="$BUILD"
                               --build-arg name="$NAME"
                               --build-arg description="$DESCRIPTION"
-                              --build-arg ci_project_url="$CI_PROJECT_URL"
+                              --build-arg repository="$REPOSITORY"
+                              --build-arg repository_type="$REPOSITORY_TYPE"
                               --build-arg ci_job_url="$CI_JOB_URL"
                               --build-arg ci_pipeline_url="$CI_PIPELINE_URL"
                               --build-arg ci_commit_branch="$CI_COMMIT_REF_NAME"

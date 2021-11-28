@@ -7,7 +7,8 @@ ARG revision
 ARG build
 ARG name
 ARG description
-ARG ci_project_url
+ARG repository
+ARG repository_type
 ARG ci_job_url
 ARG ci_pipeline_url
 ARG ci_commit_branch
@@ -26,7 +27,8 @@ ENV REVISION="$revision"
 ENV BUILD="$build"
 ENV NAME="$name"
 ENV DESCRIPTION="$description"
-ENV CI_PROJECT_URL="$ci_project_url"
+ENV REPOSITORY="$repository"
+ENV REPOSITORY_TYPE="$repository_type"
 ENV CI_JOB_URL="$ci_job_url"
 ENV CI_PIPELINE_URL="$ci_pipeline_url"
 ENV CI_COMMIT_BRANCH="$ci_commit_branch"
@@ -56,7 +58,8 @@ LABEL revision="$revision"
 LABEL build="$build"
 LABEL name="$name"
 LABEL description="$description"
-LABEL ci.project.url="$ci_project_url"
+LABEL repository="$repository"
+LABEL repository.type="$repository_type"
 LABEL ci.job.url="$ci_job_url"
 LABEL ci.pipeline.url="$ci_pipeline_url"
 LABEL ci.commit.branch="$ci_commit_branch"
