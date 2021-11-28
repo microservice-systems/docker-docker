@@ -5,7 +5,7 @@ stages:
 variables:
   APPLICATION: "docker"
   VERSION: "20.10.10"
-  NAME: "Docker in Docker Image"
+  NAME: "Docker"
   DESCRIPTION: "Docker in Docker Image"
 
 docker:
@@ -17,6 +17,9 @@ docker:
     - apk add --no-cache uuidgen
     - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
     - export BUILD="$(uuidgen)"
+    - export MAINTAINER_LOGIN="$GITLAB_USER_LOGIN"
+    - export MAINTAINER_NAME="$GITLAB_USER_NAME"
+    - export MAINTAINER_EMAIL="$GITLAB_USER_EMAIL"
     - if [[ -z $REGISTRY ]]; then echo "REGISTRY is not specified, using Docker Hub"; else echo REGISTRY="$REGISTRY"; fi
     - if [[ -z $GROUP ]]; then echo "GROUP is not specified"; exit 1; else echo GROUP="$GROUP"; fi
     - if [[ -z $APPLICATION ]]; then echo "APPLICATION is not specified"; exit 1; else echo APPLICATION="$APPLICATION"; fi
@@ -25,6 +28,9 @@ docker:
     - if [[ -z $BUILD ]]; then echo "BUILD is not specified"; exit 1; else echo BUILD="$BUILD"; fi
     - if [[ -z $NAME ]]; then echo "NAME is not specified"; exit 1; else echo NAME="$NAME"; fi
     - if [[ -z $DESCRIPTION ]]; then echo "DESCRIPTION is not specified"; exit 1; else echo DESCRIPTION="$DESCRIPTION"; fi
+    - if [[ -z $MAINTAINER_LOGIN ]]; then echo "MAINTAINER_LOGIN is not specified"; exit 1; else echo MAINTAINER_LOGIN="$MAINTAINER_LOGIN"; fi
+    - if [[ -z $MAINTAINER_NAME ]]; then echo "MAINTAINER_NAME is not specified"; exit 1; else echo MAINTAINER_NAME="$MAINTAINER_NAME"; fi
+    - if [[ -z $MAINTAINER_EMAIL ]]; then echo "MAINTAINER_EMAIL is not specified"; exit 1; else echo MAINTAINER_EMAIL="$MAINTAINER_EMAIL"; fi
     - docker build --no-cache --file ./Dockerfile
                               --build-arg registry="$REGISTRY"
                               --build-arg group="$GROUP"
@@ -42,9 +48,9 @@ docker:
                               --build-arg ci_commit_sha="$CI_COMMIT_SHA"
                               --build-arg ci_commit_message="$CI_COMMIT_MESSAGE"
                               --build-arg ci_commit_before_sha="$CI_COMMIT_BEFORE_SHA"
-                              --build-arg gitlab_user_login="$GITLAB_USER_LOGIN"
-                              --build-arg gitlab_user_name="$GITLAB_USER_NAME"
-                              --build-arg gitlab_user_email="$GITLAB_USER_EMAIL"
+                              --build-arg maintainer_login="$MAINTAINER_LOGIN"
+                              --build-arg maintainer_name="$MAINTAINER_NAME"
+                              --build-arg maintainer_email="$MAINTAINER_EMAIL"
                               --tag $REGISTRY$GROUP/$APPLICATION:$VERSION .
     - docker rmi $(docker images --filter "label=build=$BUILD" -q)
   tags:
@@ -61,6 +67,9 @@ registry:
     - echo $REGISTRY_AUTH > ~/.docker/config.json
     - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
     - export BUILD="$(uuidgen)"
+    - export MAINTAINER_LOGIN="$GITLAB_USER_LOGIN"
+    - export MAINTAINER_NAME="$GITLAB_USER_NAME"
+    - export MAINTAINER_EMAIL="$GITLAB_USER_EMAIL"
     - if [[ -z $REGISTRY ]]; then echo "REGISTRY is not specified, using Docker Hub"; else echo REGISTRY="$REGISTRY"; fi
     - if [[ -z $GROUP ]]; then echo "GROUP is not specified"; exit 1; else echo GROUP="$GROUP"; fi
     - if [[ -z $APPLICATION ]]; then echo "APPLICATION is not specified"; exit 1; else echo APPLICATION="$APPLICATION"; fi
@@ -69,6 +78,9 @@ registry:
     - if [[ -z $BUILD ]]; then echo "BUILD is not specified"; exit 1; else echo BUILD="$BUILD"; fi
     - if [[ -z $NAME ]]; then echo "NAME is not specified"; exit 1; else echo NAME="$NAME"; fi
     - if [[ -z $DESCRIPTION ]]; then echo "DESCRIPTION is not specified"; exit 1; else echo DESCRIPTION="$DESCRIPTION"; fi
+    - if [[ -z $MAINTAINER_LOGIN ]]; then echo "MAINTAINER_LOGIN is not specified"; exit 1; else echo MAINTAINER_LOGIN="$MAINTAINER_LOGIN"; fi
+    - if [[ -z $MAINTAINER_NAME ]]; then echo "MAINTAINER_NAME is not specified"; exit 1; else echo MAINTAINER_NAME="$MAINTAINER_NAME"; fi
+    - if [[ -z $MAINTAINER_EMAIL ]]; then echo "MAINTAINER_EMAIL is not specified"; exit 1; else echo MAINTAINER_EMAIL="$MAINTAINER_EMAIL"; fi
     - docker build --no-cache --file ./Dockerfile
                               --build-arg registry="$REGISTRY"
                               --build-arg group="$GROUP"
@@ -86,9 +98,9 @@ registry:
                               --build-arg ci_commit_sha="$CI_COMMIT_SHA"
                               --build-arg ci_commit_message="$CI_COMMIT_MESSAGE"
                               --build-arg ci_commit_before_sha="$CI_COMMIT_BEFORE_SHA"
-                              --build-arg gitlab_user_login="$GITLAB_USER_LOGIN"
-                              --build-arg gitlab_user_name="$GITLAB_USER_NAME"
-                              --build-arg gitlab_user_email="$GITLAB_USER_EMAIL"
+                              --build-arg maintainer_login="$MAINTAINER_LOGIN"
+                              --build-arg maintainer_name="$MAINTAINER_NAME"
+                              --build-arg maintainer_email="$MAINTAINER_EMAIL"
                               --tag $REGISTRY$GROUP/$APPLICATION:$VERSION .
     - docker push $REGISTRY$GROUP/$APPLICATION:$VERSION
     - docker rmi $(docker images --filter "label=build=$BUILD" -q)

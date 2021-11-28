@@ -15,9 +15,9 @@ ARG ci_commit_tag
 ARG ci_commit_sha
 ARG ci_commit_message
 ARG ci_commit_before_sha
-ARG gitlab_user_login
-ARG gitlab_user_name
-ARG gitlab_user_email
+ARG maintainer_login
+ARG maintainer_name
+ARG maintainer_email
 ENV REGISTRY="$registry"
 ENV GROUP="$group"
 ENV APPLICATION="$application"
@@ -34,9 +34,9 @@ ENV CI_COMMIT_TAG="$ci_commit_tag"
 ENV CI_COMMIT_SHA="$ci_commit_sha"
 ENV CI_COMMIT_MESSAGE="$ci_commit_message"
 ENV CI_COMMIT_BEFORE_SHA="$ci_commit_before_sha"
-ENV GITLAB_USER_LOGIN="$gitlab_user_login"
-ENV GITLAB_USER_NAME="$gitlab_user_name"
-ENV GITLAB_USER_EMAIL="$gitlab_user_email"
+ENV MAINTAINER_LOGIN="$maintainer_login"
+ENV MAINTAINER_NAME="$maintainer_name"
+ENV MAINTAINER_EMAIL="$maintainer_email"
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV TZ="Etc/UTC"
 RUN set -e\
@@ -64,6 +64,6 @@ LABEL ci.commit.tag="$ci_commit_tag"
 LABEL ci.commit.sha="$ci_commit_sha"
 LABEL ci.commit.message="$ci_commit_message"
 LABEL ci.commit.before.sha="$ci_commit_before_sha"
-LABEL gitlab.user.login="$gitlab_user_login"
-LABEL gitlab.user.name="$gitlab_user_name"
-LABEL gitlab.user.email="$gitlab_user_email"
+LABEL maintainer.login="$maintainer_login"
+LABEL maintainer.name="$maintainer_name"
+LABEL maintainer.email="$maintainer_email"
