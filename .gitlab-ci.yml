@@ -4,8 +4,9 @@ stages:
 
 variables:
   APPLICATION: "docker"
-  DESCRIPTION: "Docker in Docker Image"
   VERSION: "20.10.10"
+  NAME: "Docker in Docker Image"
+  DESCRIPTION: "Docker in Docker Image"
 
 docker:
   stage: Build
@@ -16,21 +17,23 @@ docker:
     - apk add --no-cache uuidgen
     - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
     - export BUILD="$(uuidgen)"
-    - echo REGISTRY="$REGISTRY"
+    - if [[ -z $REGISTRY ]]; then echo "REGISTRY is not specified, using Docker Hub"; else echo REGISTRY="$REGISTRY"; fi
     - if [[ -z $GROUP ]]; then echo "GROUP is not specified"; exit 1; else echo GROUP="$GROUP"; fi
     - if [[ -z $APPLICATION ]]; then echo "APPLICATION is not specified"; exit 1; else echo APPLICATION="$APPLICATION"; fi
-    - if [[ -z $DESCRIPTION ]]; then echo "DESCRIPTION is not specified"; exit 1; else echo DESCRIPTION="$DESCRIPTION"; fi
     - if [[ -z $VERSION ]]; then echo "VERSION is not specified"; exit 1; else echo VERSION="$VERSION"; fi
     - if [[ -z $REVISION ]]; then echo "REVISION is not specified"; exit 1; else echo REVISION="$REVISION"; fi
     - if [[ -z $BUILD ]]; then echo "BUILD is not specified"; exit 1; else echo BUILD="$BUILD"; fi
+    - if [[ -z $NAME ]]; then echo "NAME is not specified"; exit 1; else echo NAME="$NAME"; fi
+    - if [[ -z $DESCRIPTION ]]; then echo "DESCRIPTION is not specified"; exit 1; else echo DESCRIPTION="$DESCRIPTION"; fi
     - docker build --no-cache --file ./Dockerfile
                               --build-arg registry="$REGISTRY"
                               --build-arg group="$GROUP"
                               --build-arg application="$APPLICATION"
-                              --build-arg description="$DESCRIPTION"
                               --build-arg version="$VERSION"
                               --build-arg revision="$REVISION"
                               --build-arg build="$BUILD"
+                              --build-arg name="$NAME"
+                              --build-arg description="$DESCRIPTION"
                               --build-arg ci_project_url="$CI_PROJECT_URL"
                               --build-arg ci_job_url="$CI_JOB_URL"
                               --build-arg ci_pipeline_url="$CI_PIPELINE_URL"
@@ -58,21 +61,23 @@ registry:
     - echo $REGISTRY_AUTH > ~/.docker/config.json
     - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
     - export BUILD="$(uuidgen)"
-    - echo REGISTRY="$REGISTRY"
+    - if [[ -z $REGISTRY ]]; then echo "REGISTRY is not specified, using Docker Hub"; else echo REGISTRY="$REGISTRY"; fi
     - if [[ -z $GROUP ]]; then echo "GROUP is not specified"; exit 1; else echo GROUP="$GROUP"; fi
     - if [[ -z $APPLICATION ]]; then echo "APPLICATION is not specified"; exit 1; else echo APPLICATION="$APPLICATION"; fi
-    - if [[ -z $DESCRIPTION ]]; then echo "DESCRIPTION is not specified"; exit 1; else echo DESCRIPTION="$DESCRIPTION"; fi
     - if [[ -z $VERSION ]]; then echo "VERSION is not specified"; exit 1; else echo VERSION="$VERSION"; fi
     - if [[ -z $REVISION ]]; then echo "REVISION is not specified"; exit 1; else echo REVISION="$REVISION"; fi
     - if [[ -z $BUILD ]]; then echo "BUILD is not specified"; exit 1; else echo BUILD="$BUILD"; fi
+    - if [[ -z $NAME ]]; then echo "NAME is not specified"; exit 1; else echo NAME="$NAME"; fi
+    - if [[ -z $DESCRIPTION ]]; then echo "DESCRIPTION is not specified"; exit 1; else echo DESCRIPTION="$DESCRIPTION"; fi
     - docker build --no-cache --file ./Dockerfile
                               --build-arg registry="$REGISTRY"
                               --build-arg group="$GROUP"
                               --build-arg application="$APPLICATION"
-                              --build-arg description="$DESCRIPTION"
                               --build-arg version="$VERSION"
                               --build-arg revision="$REVISION"
                               --build-arg build="$BUILD"
+                              --build-arg name="$NAME"
+                              --build-arg description="$DESCRIPTION"
                               --build-arg ci_project_url="$CI_PROJECT_URL"
                               --build-arg ci_job_url="$CI_JOB_URL"
                               --build-arg ci_pipeline_url="$CI_PIPELINE_URL"
