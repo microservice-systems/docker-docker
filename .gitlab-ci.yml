@@ -5,6 +5,7 @@ stages:
 variables:
   APPLICATION: "docker"
   VERSION: "20.10.10"
+  REVISION: "$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
   NAME: "Docker"
   DESCRIPTION: "Docker in Docker Image"
   REPOSITORY: "$CI_PROJECT_URL"
@@ -14,7 +15,6 @@ variables:
   before_script:
     - set -e
     - apk add --no-cache uuidgen
-    - export REVISION="$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
     - export BUILD="$(uuidgen)"
     - export MAINTAINER_LOGIN="$GITLAB_USER_LOGIN"
     - export MAINTAINER_NAME="$GITLAB_USER_NAME"
