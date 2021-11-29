@@ -29,7 +29,7 @@ variables:
     - set -e
     - apk add --no-cache uuidgen
     - export BUILD="$(uuidgen)"
-    - printf "%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n"
+    - printf "%s\n%s\n%s\n%s\n%s\n"
              "REGISTRY=$REGISTRY"
              "GROUP=$GROUP"
              "APPLICATION=$APPLICATION"
