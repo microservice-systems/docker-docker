@@ -9,7 +9,8 @@ ARG name
 ARG description
 ARG repository
 ARG repository_type
-ARG ci_job_url
+ARG job
+ARG job_type
 ARG ci_pipeline_url
 ARG ci_commit_branch
 ARG ci_commit_tag
@@ -29,7 +30,8 @@ ENV NAME="$name"
 ENV DESCRIPTION="$description"
 ENV REPOSITORY="$repository"
 ENV REPOSITORY_TYPE="$repository_type"
-ENV CI_JOB_URL="$ci_job_url"
+ENV JOB="$job"
+ENV JOB_TYPE="$job_type"
 ENV CI_PIPELINE_URL="$ci_pipeline_url"
 ENV CI_COMMIT_BRANCH="$ci_commit_branch"
 ENV CI_COMMIT_TAG="$ci_commit_tag"
@@ -60,7 +62,8 @@ LABEL name="$name"
 LABEL description="$description"
 LABEL repository="$repository"
 LABEL repository.type="$repository_type"
-LABEL ci.job.url="$ci_job_url"
+LABEL job="$job"
+LABEL job.type="$job_type"
 LABEL ci.pipeline.url="$ci_pipeline_url"
 LABEL ci.commit.branch="$ci_commit_branch"
 LABEL ci.commit.tag="$ci_commit_tag"
