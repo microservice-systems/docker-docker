@@ -13,7 +13,6 @@ ARG job
 ARG job_type
 ARG ci_pipeline_url
 ARG ci_commit_branch
-ARG ci_commit_tag
 ARG ci_commit_sha
 ARG ci_commit_message
 ARG ci_commit_before_sha
@@ -34,7 +33,6 @@ ENV JOB="$job"
 ENV JOB_TYPE="$job_type"
 ENV CI_PIPELINE_URL="$ci_pipeline_url"
 ENV CI_COMMIT_BRANCH="$ci_commit_branch"
-ENV CI_COMMIT_TAG="$ci_commit_tag"
 ENV CI_COMMIT_SHA="$ci_commit_sha"
 ENV CI_COMMIT_MESSAGE="$ci_commit_message"
 ENV CI_COMMIT_BEFORE_SHA="$ci_commit_before_sha"
@@ -66,7 +64,6 @@ LABEL job="$job"
 LABEL job.type="$job_type"
 LABEL ci.pipeline.url="$ci_pipeline_url"
 LABEL ci.commit.branch="$ci_commit_branch"
-LABEL ci.commit.tag="$ci_commit_tag"
 LABEL ci.commit.sha="$ci_commit_sha"
 LABEL ci.commit.message="$ci_commit_message"
 LABEL ci.commit.before.sha="$ci_commit_before_sha"
