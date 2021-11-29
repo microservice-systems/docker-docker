@@ -16,7 +16,7 @@ ARG ci_commit_branch
 ARG ci_commit_sha
 ARG ci_commit_message
 ARG ci_commit_before_sha
-ARG maintainer_login
+ARG maintainer
 ARG maintainer_name
 ARG maintainer_email
 ENV REGISTRY="$registry"
@@ -36,7 +36,7 @@ ENV CI_COMMIT_BRANCH="$ci_commit_branch"
 ENV CI_COMMIT_SHA="$ci_commit_sha"
 ENV CI_COMMIT_MESSAGE="$ci_commit_message"
 ENV CI_COMMIT_BEFORE_SHA="$ci_commit_before_sha"
-ENV MAINTAINER_LOGIN="$maintainer_login"
+ENV MAINTAINER="$maintainer"
 ENV MAINTAINER_NAME="$maintainer_name"
 ENV MAINTAINER_EMAIL="$maintainer_email"
 ENV DEBIAN_FRONTEND="noninteractive"
@@ -67,6 +67,6 @@ LABEL ci.commit.branch="$ci_commit_branch"
 LABEL ci.commit.sha="$ci_commit_sha"
 LABEL ci.commit.message="$ci_commit_message"
 LABEL ci.commit.before.sha="$ci_commit_before_sha"
-LABEL maintainer.login="$maintainer_login"
+LABEL maintainer="$maintainer"
 LABEL maintainer.name="$maintainer_name"
 LABEL maintainer.email="$maintainer_email"

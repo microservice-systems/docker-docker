@@ -12,15 +12,15 @@ variables:
   REPOSITORY_TYPE: "GITLAB"
   JOB: "$CI_JOB_URL"
   JOB_TYPE: "GITLAB"
+  MAINTAINER: "$GITLAB_USER_LOGIN"
+  MAINTAINER_NAME: "$GITLAB_USER_NAME"
+  MAINTAINER_EMAIL: "$GITLAB_USER_EMAIL"
 
 .build-docker-before-script:
   before_script:
     - set -e
     - apk add --no-cache uuidgen
     - export BUILD="$(uuidgen)"
-    - export MAINTAINER_LOGIN="$GITLAB_USER_LOGIN"
-    - export MAINTAINER_NAME="$GITLAB_USER_NAME"
-    - export MAINTAINER_EMAIL="$GITLAB_USER_EMAIL"
     - if [[ -z $REGISTRY ]]; then echo "REGISTRY is not specified, using Docker Hub"; else echo REGISTRY="$REGISTRY"; fi
     - if [[ -z $GROUP ]]; then echo "GROUP is not specified"; exit 1; else echo GROUP="$GROUP"; fi
     - if [[ -z $APPLICATION ]]; then echo "APPLICATION is not specified"; exit 1; else echo APPLICATION="$APPLICATION"; fi
@@ -33,7 +33,7 @@ variables:
     - if [[ -z $REPOSITORY_TYPE ]]; then echo "REPOSITORY_TYPE is not specified"; exit 1; else echo REPOSITORY_TYPE="$REPOSITORY_TYPE"; fi
     - if [[ -z $JOB ]]; then echo "JOB is not specified"; exit 1; else echo JOB="$JOB"; fi
     - if [[ -z $JOB_TYPE ]]; then echo "JOB_TYPE is not specified"; exit 1; else echo JOB_TYPE="$JOB_TYPE"; fi
-    - if [[ -z $MAINTAINER_LOGIN ]]; then echo "MAINTAINER_LOGIN is not specified"; exit 1; else echo MAINTAINER_LOGIN="$MAINTAINER_LOGIN"; fi
+    - if [[ -z $MAINTAINER ]]; then echo "MAINTAINER is not specified"; exit 1; else echo MAINTAINER="$MAINTAINER"; fi
     - if [[ -z $MAINTAINER_NAME ]]; then echo "MAINTAINER_NAME is not specified"; exit 1; else echo MAINTAINER_NAME="$MAINTAINER_NAME"; fi
     - if [[ -z $MAINTAINER_EMAIL ]]; then echo "MAINTAINER_EMAIL is not specified"; exit 1; else echo MAINTAINER_EMAIL="$MAINTAINER_EMAIL"; fi
     - docker build --no-cache --file ./Dockerfile
@@ -54,7 +54,7 @@ variables:
                               --build-arg ci_commit_sha="$CI_COMMIT_SHA"
                               --build-arg ci_commit_message="$CI_COMMIT_MESSAGE"
                               --build-arg ci_commit_before_sha="$CI_COMMIT_BEFORE_SHA"
-                              --build-arg maintainer_login="$MAINTAINER_LOGIN"
+                              --build-arg maintainer="$MAINTAINER"
                               --build-arg maintainer_name="$MAINTAINER_NAME"
                               --build-arg maintainer_email="$MAINTAINER_EMAIL"
                               --tag $REGISTRY$GROUP/$APPLICATION:$VERSION .
