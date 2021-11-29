@@ -3,6 +3,8 @@ stages:
   - Push
 
 variables:
+  REGISTRY: ""
+  GROUP: "micsys"
   APPLICATION: "docker"
   VERSION: "20.10.10"
   REVISION: "$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA"
@@ -12,6 +14,12 @@ variables:
   REPOSITORY_TYPE: "GITLAB"
   JOB: "$CI_JOB_URL"
   JOB_TYPE: "GITLAB"
+  PIPELINE: "$CI_PIPELINE_URL"
+  PIPELINE_TYPE: "GITLAB"
+  BRANCH: "$CI_COMMIT_REF_NAME"
+  COMMIT: "$CI_COMMIT_SHA"
+  COMMIT_BEFORE: "$CI_COMMIT_BEFORE_SHA"
+  COMMIT_MESSAGE: "$CI_COMMIT_MESSAGE"
   MAINTAINER: "$GITLAB_USER_LOGIN"
   MAINTAINER_NAME: "$GITLAB_USER_NAME"
   MAINTAINER_EMAIL: "$GITLAB_USER_EMAIL"
@@ -21,21 +29,27 @@ variables:
     - set -e
     - apk add --no-cache uuidgen
     - export BUILD="$(uuidgen)"
-    - if [[ -z $REGISTRY ]]; then echo "REGISTRY is not specified, using Docker Hub"; else echo REGISTRY="$REGISTRY"; fi
-    - if [[ -z $GROUP ]]; then echo "GROUP is not specified"; exit 1; else echo GROUP="$GROUP"; fi
-    - if [[ -z $APPLICATION ]]; then echo "APPLICATION is not specified"; exit 1; else echo APPLICATION="$APPLICATION"; fi
-    - if [[ -z $VERSION ]]; then echo "VERSION is not specified"; exit 1; else echo VERSION="$VERSION"; fi
-    - if [[ -z $REVISION ]]; then echo "REVISION is not specified"; exit 1; else echo REVISION="$REVISION"; fi
-    - if [[ -z $BUILD ]]; then echo "BUILD is not specified"; exit 1; else echo BUILD="$BUILD"; fi
-    - if [[ -z $NAME ]]; then echo "NAME is not specified"; exit 1; else echo NAME="$NAME"; fi
-    - if [[ -z $DESCRIPTION ]]; then echo "DESCRIPTION is not specified"; exit 1; else echo DESCRIPTION="$DESCRIPTION"; fi
-    - if [[ -z $REPOSITORY ]]; then echo "REPOSITORY is not specified"; exit 1; else echo REPOSITORY="$REPOSITORY"; fi
-    - if [[ -z $REPOSITORY_TYPE ]]; then echo "REPOSITORY_TYPE is not specified"; exit 1; else echo REPOSITORY_TYPE="$REPOSITORY_TYPE"; fi
-    - if [[ -z $JOB ]]; then echo "JOB is not specified"; exit 1; else echo JOB="$JOB"; fi
-    - if [[ -z $JOB_TYPE ]]; then echo "JOB_TYPE is not specified"; exit 1; else echo JOB_TYPE="$JOB_TYPE"; fi
-    - if [[ -z $MAINTAINER ]]; then echo "MAINTAINER is not specified"; exit 1; else echo MAINTAINER="$MAINTAINER"; fi
-    - if [[ -z $MAINTAINER_NAME ]]; then echo "MAINTAINER_NAME is not specified"; exit 1; else echo MAINTAINER_NAME="$MAINTAINER_NAME"; fi
-    - if [[ -z $MAINTAINER_EMAIL ]]; then echo "MAINTAINER_EMAIL is not specified"; exit 1; else echo MAINTAINER_EMAIL="$MAINTAINER_EMAIL"; fi
+    - printf "REGISTRY='$REGISTRY'\n"
+             "GROUP='$GROUP'\n"
+             "APPLICATION='$APPLICATION'\n"
+             "VERSION='$VERSION'\n"
+             "REVISION='$REVISION'\n"
+             "BUILD='$BUILD'\n"
+             "NAME='$NAME'\n"
+             "DESCRIPTION='$DESCRIPTION'\n"
+             "REPOSITORY='$REPOSITORY'\n"
+             "REPOSITORY_TYPE='$REPOSITORY_TYPE'\n"
+             "JOB='$JOB'\n"
+             "JOB_TYPE='$JOB_TYPE'\n"
+             "PIPELINE='$PIPELINE'\n"
+             "PIPELINE_TYPE='$PIPELINE_TYPE'\n"
+             "BRANCH='$BRANCH'\n"
+             "COMMIT='$COMMIT'\n"
+             "COMMIT_BEFORE='$COMMIT_BEFORE'\n"
+             "COMMIT_MESSAGE='$COMMIT_MESSAGE'\n"
+             "MAINTAINER='$MAINTAINER'\n"
+             "MAINTAINER_NAME='$MAINTAINER_NAME'\n"
+             "MAINTAINER_EMAIL='$MAINTAINER_EMAIL'\n"
     - docker build --no-cache --file ./Dockerfile
                               --build-arg registry="$REGISTRY"
                               --build-arg group="$GROUP"
@@ -49,11 +63,11 @@ variables:
                               --build-arg repository_type="$REPOSITORY_TYPE"
                               --build-arg job="$JOB"
                               --build-arg job_type="$JOB_TYPE"
-                              --build-arg ci_pipeline_url="$CI_PIPELINE_URL"
-                              --build-arg ci_commit_branch="$CI_COMMIT_REF_NAME"
-                              --build-arg ci_commit_sha="$CI_COMMIT_SHA"
-                              --build-arg ci_commit_message="$CI_COMMIT_MESSAGE"
-                              --build-arg ci_commit_before_sha="$CI_COMMIT_BEFORE_SHA"
+                              --build-arg ci_pipeline_url="$PIPELINE"
+                              --build-arg ci_commit_branch="$BRANCH"
+                              --build-arg ci_commit_sha="$COMMIT"
+                              --build-arg ci_commit_before_sha="$COMMIT_BEFORE"
+                              --build-arg ci_commit_message="$COMMIT_MESSAGE"
                               --build-arg maintainer="$MAINTAINER"
                               --build-arg maintainer_name="$MAINTAINER_NAME"
                               --build-arg maintainer_email="$MAINTAINER_EMAIL"
